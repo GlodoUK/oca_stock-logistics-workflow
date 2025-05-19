@@ -75,12 +75,13 @@
 
         <!-- Remove "All items could not be shipped..." sentence
             Substitute it by a message indicating if all goods have been delivered. -->
-        <xpath expr='//t[@t-if="o.backorder_ids and backorders"]' position="attributes">
-            <attribute name="t-if">False</attribute>
-            <attribute name="name">stock_backorder_block</attribute>
-        </xpath>
-        <xpath expr='//t[@name="stock_backorder_block"]' position="after">
-            <t t-if="o.picking_type_id.code == 'outgoing' and get_remaining_to_deliver">
+        <xpath
+            expr='//div[@t-if="not (o.backorder_ids and backorders)"]'
+            position="after"
+        >
+            <t
+                t-elif="o.picking_type_id.code == 'outgoing' and get_remaining_to_deliver"
+            >
                 <t t-set="remainings" t-value="get_remaining_to_deliver(o)" />
                 <t t-if="not remainings">
                     <p
@@ -143,7 +144,7 @@
             <attribute name="t-if">move_line.id</attribute>
         </xpath>
 
-        <xpath expr='//span[@t-field="move_line.qty_done"]' position="attributes">
+        <xpath expr='//span[@t-field="move_line.quantity"]' position="attributes">
             <attribute name="t-if">move_line.id</attribute>
         </xpath>
 
@@ -167,13 +168,13 @@
 
         <!-- Replace the customer refs with the one based on the move line displayed -->
         <xpath
-            expr='//p[@t-field="o.sudo().sale_id.client_order_ref"]'
+            expr='//div[@t-field="o.sudo().sale_id.client_order_ref"]'
             position="attributes"
         >
             <attribute name="t-if">False</attribute>
         </xpath>
         <xpath
-            expr='//p[@t-field="o.sudo().sale_id.client_order_ref"]'
+            expr='//div[@t-field="o.sudo().sale_id.client_order_ref"]'
             position="after"
         >
             <p class="m-0">
